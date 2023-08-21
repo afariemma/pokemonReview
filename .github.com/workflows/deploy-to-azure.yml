@@ -1,0 +1,41 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Deploy ASP.NET Core web api to Azure
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  AZURE_WEBAPP_NAME: goparent-web-api # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+  env.AZURE_WEBAPP_PUBLISH_PROFILE: <publishData><publishProfile profileName="goparent-web-api - Web Deploy" publishMethod="MSDeploy" publishUrl="goparent-web-api.scm.azurewebsites.net:443" msdeploySite="goparent-web-api" userName="$goparent-web-api" userPWD="Y7Pf1sk48w003K0SAP1JBhm5gki5lkJDzCi6JMwFKmTgv8SxXx4QDHZgdTXB" destinationAppUrl="https://goparent-web-api.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="goparent-web-api - FTP" publishMethod="FTP" publishUrl="ftps://waws-prod-am2-693.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="goparent-web-api\$goparent-web-api" userPWD="Y7Pf1sk48w003K0SAP1JBhm5gki5lkJDzCi6JMwFKmTgv8SxXx4QDHZgdTXB" destinationAppUrl="https://goparent-web-api.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="goparent-web-api - Zip Deploy" publishMethod="ZipDeploy" publishUrl="goparent-web-api.scm.azurewebsites.net:443" userName="$goparent-web-api" userPWD="Y7Pf1sk48w003K0SAP1JBhm5gki5lkJDzCi6JMwFKmTgv8SxXx4QDHZgdTXB" destinationAppUrl="https://goparent-web-api.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile></publishData>
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 3.0.x # The app is running of version 3 of dotnet
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Publish
+        run: dotnet publish --no-build
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Deployment
+        uses: actions/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }} # Define secret variable in repository settings as per action documentation
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
