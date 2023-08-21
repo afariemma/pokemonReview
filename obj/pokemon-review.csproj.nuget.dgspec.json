@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj": {}
+    "C:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj": {}
   },
   "projects": {
-    "c:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj": {
+    "C:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
+        "projectUniqueName": "C:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
         "projectName": "pokemon-review",
-        "projectPath": "c:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
+        "projectPath": "C:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "c:\\Projects\\practice\\asp.net\\pokemon-review\\obj\\",
+        "outputPath": "C:\\Projects\\practice\\asp.net\\pokemon-review\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",

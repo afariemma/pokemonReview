@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uH98K4TzP1Xbb6wVBzcVpsrT6zAWGGAhVVmDRncZbf9kNwuQz2BjMt9BwxLQs2cvNfZFaRBtkOo+3rVPb7xRvg==",
+  "dgSpecHash": "JhXHsTcyGNEhOy4qVtcytudF5M6ONcuO11pNKIU6Oc5q3KYzfOpDKC1M2x41UoYpOHXpYjTJIL4pdQdssIwQMg==",
   "success": true,
-  "projectFilePath": "c:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
+  "projectFilePath": "C:\\Projects\\practice\\asp.net\\pokemon-review\\pokemon-review.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
