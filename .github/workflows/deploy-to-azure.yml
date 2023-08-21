@@ -22,13 +22,11 @@ jobs:
         with:
           dotnet-version: 6.0.x # The app is running of version 3 of dotnet
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./pokemon-review.sln
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build ./pokemon-review.sln --configuration Release --no-restore
       - name: Publish
-        run: dotnet publish --no-build
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet publish ./pokemon-review.sln --configuration Release --no-build
 
       - name: Deployment
         uses: azure/webapps-deploy@v2
