@@ -69,7 +69,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish'
+          dotnet publish
 
       # Deploy to Azure Web apps
       - name: "Run Azure webapp deploy action using publish profile credentials"
