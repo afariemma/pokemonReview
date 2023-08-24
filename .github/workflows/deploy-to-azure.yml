@@ -99,15 +99,12 @@ jobs:
           dotnet-version: ${{ env.NETCORE_VERSION }}
       - name: Restore
         run: |
-          cd pokemon-review
           dotnet restore
       - name: Build
         run: |
-          cd pokemon-review
           dotnet build --no-restore
       - name: Publish
         run: |
-          cd pokemon-review
           dotnet publish --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_NAME }}
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
