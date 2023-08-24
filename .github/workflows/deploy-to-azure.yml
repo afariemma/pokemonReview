@@ -86,7 +86,7 @@ on: [push]
 env:
   AZURE_WEBAPP_NAME: PokemonReview
   AZURE_WEBAPP_PACKAGE_NAME: "../published"
-  NETCORE_VERSION: "6"
+  NETCORE_VERSION: "3.1.103"
 jobs:
   build:
     name: Build and Deploy
