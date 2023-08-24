@@ -62,7 +62,7 @@ on:
     branches: [main]
 
 env:
-  app-name: "goparent-web-api"
+  app-name: "PokemonReview"
   rg-name: "pokemonreview"
 
 jobs:
@@ -86,7 +86,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: Publish
-        run: dotnet publish pokemon-review/pokemon-review.csproj -c Release -o website
+        run: dotnet publish pokemon-review.csproj -c Release -o website
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
