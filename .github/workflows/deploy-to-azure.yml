@@ -51,15 +51,19 @@
 
 name: Build and deploy ASP.Net Core app to an Azure Web App
 
-env:
-  AZURE_WEBAPP_NAME: PokemonReview # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: "7" # set this to the .NET Core version to use
-
 on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "The reason for running the workflow"
+        required: true
+        default: "Manual build from GitHub UI"
   push:
-    branches:
-      - main
+    branches: [main]
+
+env:
+  app-name: "goparent-web-api"
+  rg-name: "pokemonreview"
 
 jobs:
   build:
@@ -67,50 +71,70 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up .NET Core
+      - name: "Print manual run reason"
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo 'Reason: ${{ github.event.inputs.reason }}'
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Publish
+        run: dotnet publish pokemon-review/pokemon-review.csproj -c Release -o website
+      - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: website
+          path: pokemonreview/website/**
+          if-no-files-found: error
 
-  deploy:
-    runs-on: ubuntu-latest
+  deploy_staging:
     needs: build
+    runs-on: ubuntu-latest
+
     environment:
-      name: "production"
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      name: STAGING
+      url: ${{ steps.deploywebapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download a Build Artifact
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: website
+          path: website
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy web app
+        id: deploywebapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-# 85270a1854658d167ab239bce43949edb336fa7c
+          app-name: ${{ env.app-name }}
+          slot-name: staging
+          package: website
+
+      # - name: Update config
+      #   uses: Azure/appservice-settings@v1
+      #   with:
+      #     app-name: ${{ env.app-name }}
+      #     slot-name: staging
+      #     app-settings-json: |
+      #       [
+      #           {
+      #               "name": "UI:Index:Header",
+      #               "value": "${{ secrets.INDEX_HEADER }}",
+      #               "slotSetting": true
+      #           }
+      #       ]
+
+      - name: az cli logout
+        run: az logout
