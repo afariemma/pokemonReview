@@ -91,7 +91,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: website
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: website
           if-no-files-found: error
 
   deploy_staging:
