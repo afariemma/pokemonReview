@@ -102,10 +102,10 @@ jobs:
           dotnet restore
       - name: Build
         run: |
-          dotnet build --no-restore
+          dotnet build pokemon-review.sln  --no-restore
       - name: Publish
         run: |
-          dotnet publish --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_NAME }}
+          dotnet publish pokemon-review.csproj --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_NAME }}
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
         with:
